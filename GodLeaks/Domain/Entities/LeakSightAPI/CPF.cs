@@ -7,7 +7,8 @@ public class CPF
 {
     public class APICPFFULL
     {
-        public string cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public int total { get; set; }
         public List<Dado> dados { get; set; }
     }
@@ -35,7 +36,8 @@ public class CPF
 
     public class CONSULTACPF
     {
-        public int cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string nome { get; set; }
         public string pessoa { get; set; }
         public int ddd { get; set; }
@@ -64,7 +66,8 @@ public class CPF
 
     public class CREDLINK
     {
-        public string cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string nome { get; set; }
         public string tipo_endereco { get; set; }
         public string logradouro { get; set; }
@@ -106,7 +109,8 @@ public class CPF
         public List<Telefone> telefones { get; set; }
         public List<Endereco> enderecos { get; set; }
         public List<object> parentes { get; set; }
-        public string CPF { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? CPF { get; set; }
         public string NOME { get; set; }
         public string SEXO { get; set; }
         public string NASC { get; set; }
@@ -164,7 +168,8 @@ public class CPF
 
     public class Email
     {
-        public string cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string email { get; set; }
         public string email_score { get; set; }
         public string email_pessoal { get; set; }
