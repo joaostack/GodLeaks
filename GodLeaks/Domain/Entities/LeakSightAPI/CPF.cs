@@ -34,7 +34,7 @@ public class CPF
 
     public class CONSULTACPF
     {
-        public int cpf { get; set; }
+        public string cpf { get; set; }
         public string nome { get; set; }
         public string pessoa { get; set; }
         public int ddd { get; set; }
