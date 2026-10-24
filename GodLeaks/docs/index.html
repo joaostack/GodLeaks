@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GodLeaks — bot para Discord com consultas de inteligência e segurança digital.">
+  <title>GodLeaks // Discord Intelligence Bot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="prompt">&gt;_</span> GOD<span>LEAKS</span></a>
+    <nav aria-label="Navegação principal">
+      <a href="#sobre">sobre</a>
+      <a href="#comandos">comandos</a>
+      <a href="#setup">setup</a>
+      <a class="nav-button" href="https://github.com/" target="_blank" rel="noreferrer">github ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="dot"></span> SYSTEM ONLINE // DISCORD BOT</p>
+        <h1>Informação.<br><em>Conexão.</em><br>Controle.</h1>
+        <p class="lead">Uma central de consultas integrada ao Discord, construída para transformar buscas em comandos rápidos, organizados e rastreáveis.</p>
+        <div class="actions">
+          <a class="button primary" href="#comandos">explorar comandos <span>→</span></a>
+          <a class="button secondary" href="https://github.com/" target="_blank" rel="noreferrer">ver no github <span>↗</span></a>
+        </div>
+      </div>
+      <div class="terminal" aria-label="Prévia do terminal">
+        <div class="terminal-bar"><span></span><span></span><span></span><b>godleaks.exe</b></div>
+        <div class="terminal-body">
+          <p><i>root@godleaks</i>:~$ ./start</p>
+          <p class="muted">initializing secure channel...</p>
+          <p class="green">[ OK ] Discord gateway connected</p>
+          <p class="green">[ OK ] LeakSight API ready</p>
+          <p class="muted">listening for commands_</p>
+          <div class="terminal-command"><span>root@godleaks</span>:~$ <strong>!comandos</strong><span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats wrap" aria-label="Características do projeto">
+      <div><strong>07</strong><span>comandos de consulta</span></div>
+      <div><strong>.NET</strong><span>arquitetura moderna</span></div>
+      <div><strong>API</strong><span>integração LeakSight</span></div>
+      <div><strong>24/7</strong><span>disponível no Discord</span></div>
+    </section>
+
+    <section class="section wrap" id="sobre">
+      <div class="section-label">01 // sobre o projeto</div>
+      <div class="section-content split">
+        <div><h2>Um painel de inteligência<br><em>no seu servidor.</em></h2></div>
+        <div><p>O GodLeaks é um bot para Discord desenvolvido em C# e .NET. Ele centraliza consultas de dados através da API LeakSight e oferece uma experiência simples por comandos.</p><p class="note">// use somente com autorização e respeitando a legislação aplicável.</p></div>
+      </div>
+    </section>
+
+    <section class="section wrap" id="comandos">
+      <div class="section-label">02 // matriz de comandos</div>
+      <div class="command-grid">
+        <article><span>01</span><h3>!cpf</h3><p>Consulta de CPF</p></article>
+        <article><span>02</span><h3>!email</h3><p>Consulta de e-mail</p></article>
+        <article><span>03</span><h3>!username</h3><p>Consulta de username</p></article>
+        <article><span>04</span><h3>!placa</h3><p>Consulta de placa veicular</p></article>
+        <article><span>05</span><h3>!nome</h3><p>Consulta de nome completo</p></article>
+        <article><span>06</span><h3>!senha</h3><p>Consulta de senha</p></article>
+        <article><span>07</span><h3>!url</h3><p>Consulta de logins de URL</p></article>
+      </div>
+    </section>
+
+    <section class="section wrap" id="setup">
+      <div class="section-label">03 // inicialização</div>
+      <div class="setup-box"><p><span>$</span> git clone godleaks</p><p><span>$</span> dotnet restore</p><p><span>$</span> dotnet run</p><small>configure Discord:Token, Discord:Prefix e APIKEY antes de iniciar.</small></div>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>GODLEAKS // built for responsible research</span><span>© 2026</span></footer>
+</body>
+</html>

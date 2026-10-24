@@ -47,7 +47,13 @@ public class LeakSight : ILeakSight
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(json)
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new StringOrNumberConverter());
+
+        return JsonSerializer.Deserialize<T>(json, options)
                ?? throw new JsonException("LeakSight returned an empty response.");
     }
 }

@@ -16,7 +16,9 @@ public class Nome
         public string nome { get; set; }
         public string tipo { get; set; }
         public string logr { get; set; }
-        public int num { get; set; }
+        // The API returns address numbers as either JSON numbers or strings
+        // (for example, "S/N"). Keep the value textual to support both forms.
+        public string num { get; set; }
         public object compl { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
