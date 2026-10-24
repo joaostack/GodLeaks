@@ -1,6 +1,9 @@
 ﻿using GodLeaks.Infrastructure.DependencyInjection;
 using GodLeaks.Logging;
 using GodLeaks.Presentation.Console;
+using GodLeaks.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NetCord.Gateway;
@@ -24,6 +27,23 @@ var prefix = builder.Configuration["Discord:Prefix"];
 var apikey = builder.Configuration["APIKEY"];
 var consoleUi = new ConsoleUi();
 
+builder
+    .Services.AddDiscordGateway(options =>
+    {
+        options.Intents = GatewayIntents.All;
+        options.Token = token;
+    })
+    .AddCommands();
+
+var host = builder.Build();
+
+// Aplica as migrações pendentes e cria o banco/tabelas na primeira execução.
+using (var scope = host.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<GodLeaksDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 if (string.IsNullOrWhiteSpace(token))
 {
     consoleUi.WriteError(
@@ -43,16 +63,6 @@ if (string.IsNullOrWhiteSpace(apikey))
     consoleUi.WriteError("APIKEY não definida!");
     return;
 }
-
-builder
-    .Services.AddDiscordGateway(options =>
-    {
-        options.Intents = GatewayIntents.All;
-        options.Token = token;
-    })
-    .AddCommands();
-
-var host = builder.Build();
 
 host.AddModules(typeof(Program).Assembly);
 
