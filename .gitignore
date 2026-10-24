@@ -5,3 +5,6 @@ obj/
 godleaks.db
 godleaks.
 Migrations/
+godleaks.db-shm
+godleaks.db-wal
+dotnet-tools.json
