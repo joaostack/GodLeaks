@@ -1,5 +1,7 @@
 # GodLeaks
 
+<img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/0ee74c7b-cef6-492a-a3d7-7a66d2c286d3" />
+
 Bot do Discord para consultas de dados por meio da API LeakSight.
 
 O projeto foi feito em C# com .NET 10 e oferece comandos para consultar CPF, e-mail, nome, username, placa, senha e URL. O acesso dos usuários é controlado por assinaturas armazenadas em um banco SQLite local.
@@ -60,5 +62,4 @@ Os comandos de consulta exigem uma assinatura ativa. A administração de usuár
 Use o bot somente com autorização e de acordo com as leis e regras do Discord. Consultas envolvendo dados pessoais devem ter finalidade legítima, respeitar a privacidade das pessoas e seguir a legislação aplicável. O projeto não deve ser usado para doxxing, perseguição, fraude ou qualquer atividade ilegal.
 
 ## Licença
-
-Este projeto ainda não possui uma licença definida.
+MIT
