@@ -58,6 +58,7 @@ public class Email
         public List<object> DatabaseOsintLeaks { get; set; }
         public Osint osint { get; set; }
         public BigData BigData { get; set; }
+        public Osint Osint { get; set; }
         public Brazil15B Brazil15B { get; set; }
     }
 

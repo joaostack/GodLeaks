@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using GodLeaks.Infrastructure.LeakSightAPI;
 
 namespace GodLeaks.Domain.Entities.LeakSightAPI;
 
@@ -46,22 +45,14 @@ public class CPF
         public string municipionascimento { get; set; }
         public string municipio { get; set; }
         public string logradouro { get; set; }
-        // The API may return numeric or textual address numbers (e.g. "S/N").
-        // Keep it as text so deserialization accepts both forms and preserves
-        // leading zeroes and non-numeric values.
-        [JsonConverter(typeof(StringOrNumberConverter))]
-        public string numero { get; set; }
+        public int? numero { get; set; }
         public string bairro { get; set; }
         public string cep { get; set; }
-        [JsonConverter(typeof(StringOrNumberConverter))]
-        public string? rgnumero { get; set; }
+        public long? rgnumero { get; set; }
         public string rgorgaoemisor { get; set; }
         public string rguf { get; set; }
-        [JsonConverter(typeof(StringOrNumberConverter))]
-        public string? rgdataemissao { get; set; }
-        [JsonConverter(typeof(StringOrNumberConverter))]
-        public string? cns { get; set; }
-        [JsonConverter(typeof(StringOrNumberConverter))]
+        public long? rgdataemissao { get; set; }
+        public long? cns { get; set; }
         public string telefone { get; set; }
         public string telefonesecundario { get; set; }
     }
@@ -174,8 +165,12 @@ public class CPF
         public string email_pessoal { get; set; }
         public string blacklist { get; set; }
         public int CONTATOS_ID { get; set; }
+        public string EMAIL { get; set; }
         public int PRIORIDADE { get; set; }
+        public string EMAIL_SCORE { get; set; }
+        public string EMAIL_PESSOAL { get; set; }
         public string EMAIL_DUPLICADO { get; set; }
+        public string BLACKLIST { get; set; }
         public string ESTRUTURA { get; set; }
         public string STATUS_VT { get; set; }
         public string DOMINIO { get; set; }
@@ -278,6 +273,7 @@ public class CPF
         public List<object> DatabaseOsintLeaks { get; set; }
         public Osint osint { get; set; }
         public BigData BigData { get; set; }
+        public Osint Osint { get; set; }
         public Brazil15B Brazil15B { get; set; }
     }
 }
