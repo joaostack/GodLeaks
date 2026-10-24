@@ -7,6 +7,11 @@ namespace GodLeaks.Infrastructure.LeakSightAPI;
 
 public class LeakSight : ILeakSight
 {
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        Converters = { new StringOrNumberConverter() }
+    };
+
     private readonly HttpClient _httpClient;
     private readonly string _token;
 
@@ -47,7 +52,7 @@ public class LeakSight : ILeakSight
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(json)
+        return JsonSerializer.Deserialize<T>(json, JsonOptions)
                ?? throw new JsonException("LeakSight returned an empty response.");
     }
 }
