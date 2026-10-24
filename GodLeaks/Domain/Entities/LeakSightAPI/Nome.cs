@@ -30,7 +30,8 @@ public class Nome
         public int tel { get; set; }
         public object inst { get; set; }
         public string operadora { get; set; }
-        public object cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string tp_log { get; set; }
         public string lograd { get; set; }
         public object telefone { get; set; }
@@ -66,7 +67,8 @@ public class Nome
 
     public class CREDILINK
     {
-        public string cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string nome { get; set; }
         public string tipo_endereco { get; set; }
         public string logradouro { get; set; }
@@ -102,7 +104,8 @@ public class Nome
     public class Dado
     {
         public int CONTATOS_ID { get; set; }
-        public string CPF { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? CPF { get; set; }
         public string NOME { get; set; }
         public string SEXO { get; set; }
         public string NASC { get; set; }
@@ -171,11 +174,13 @@ public class Nome
 
     public class Parente
     {
-        public string CPF_Completo { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? CPF_Completo { get; set; }
         public string NOME { get; set; }
         public string NOME_VINCULO { get; set; }
         public string VINCULO { get; set; }
-        public string CPF_VINCULO { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? CPF_VINCULO { get; set; }
     }
 
     public class Pi
@@ -195,7 +200,8 @@ public class Nome
 
     public class RECEITAFEDERALNOME
     {
-        public string cpf { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cpf { get; set; }
         public string nome { get; set; }
         public string primeironome { get; set; }
         public string ultimonome { get; set; }
