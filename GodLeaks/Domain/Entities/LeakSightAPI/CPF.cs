@@ -49,7 +49,7 @@ public class CPF
         public string municipio { get; set; }
         public string logradouro { get; set; }
         [JsonConverter(typeof(StringOrNumberConverter))]
-        public string numero { get; set; }
+        public string? numero { get; set; }
         public string bairro { get; set; }
         public string cep { get; set; }
         [JsonConverter(typeof(StringOrNumberConverter))]

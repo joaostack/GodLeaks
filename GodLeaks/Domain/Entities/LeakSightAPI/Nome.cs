@@ -44,7 +44,8 @@ public class Nome
         public string nascimento { get; set; }
         public string mae { get; set; }
         public string rua { get; set; }
-        public int? numero { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? numero { get; set; }
         public string complemento { get; set; }
         public string pessoa { get; set; }
         public int? fone { get; set; }
@@ -72,7 +73,8 @@ public class Nome
         public string nome { get; set; }
         public string tipo_endereco { get; set; }
         public string logradouro { get; set; }
-        public string numero { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? numero { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
         public string estado { get; set; }
