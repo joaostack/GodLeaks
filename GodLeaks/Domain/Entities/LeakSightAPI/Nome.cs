@@ -1,8 +1,9 @@
+using System.Text.Json;
+
 namespace GodLeaks.Domain.Entities.LeakSightAPI;
 
 public class Nome
 {
-// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class BIGDATANOME
     {
         public string nome_completo { get; set; }
@@ -16,14 +17,14 @@ public class Nome
         public string nome { get; set; }
         public string tipo { get; set; }
         public string logr { get; set; }
-        public int num { get; set; }
+        public JsonElement num { get; set; }
         public object compl { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
         public string uf { get; set; }
-        public int cep { get; set; }
-        public int ddd { get; set; }
-        public int tel { get; set; }
+        public JsonElement cep { get; set; }
+        public JsonElement ddd { get; set; }
+        public JsonElement tel { get; set; }
         public object inst { get; set; }
         public string operadora { get; set; }
         public object cpf { get; set; }
@@ -39,10 +40,10 @@ public class Nome
         public string nascimento { get; set; }
         public string mae { get; set; }
         public string rua { get; set; }
-        public int? numero { get; set; }
+        public JsonElement numero { get; set; }
         public string complemento { get; set; }
         public string pessoa { get; set; }
-        public int? fone { get; set; }
+        public JsonElement fone { get; set; }
         public long? cns { get; set; }
         public string sexo { get; set; }
         public string raca_cor { get; set; }
