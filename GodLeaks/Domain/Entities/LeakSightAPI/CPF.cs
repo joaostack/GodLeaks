@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using GodLeaks.Infrastructure.LeakSightAPI;
 
 namespace GodLeaks.Domain.Entities.LeakSightAPI;
 
@@ -34,7 +35,7 @@ public class CPF
 
     public class CONSULTACPF
     {
-        public string cpf { get; set; }
+        public int cpf { get; set; }
         public string nome { get; set; }
         public string pessoa { get; set; }
         public int ddd { get; set; }
@@ -45,14 +46,18 @@ public class CPF
         public string municipionascimento { get; set; }
         public string municipio { get; set; }
         public string logradouro { get; set; }
-        public int? numero { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string numero { get; set; }
         public string bairro { get; set; }
         public string cep { get; set; }
-        public long? rgnumero { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? rgnumero { get; set; }
         public string rgorgaoemisor { get; set; }
         public string rguf { get; set; }
-        public long? rgdataemissao { get; set; }
-        public long? cns { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? rgdataemissao { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cns { get; set; }
         public string telefone { get; set; }
         public string telefonesecundario { get; set; }
     }

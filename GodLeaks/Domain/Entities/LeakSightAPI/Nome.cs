@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization;
+using GodLeaks.Infrastructure.LeakSightAPI;
+
 namespace GodLeaks.Domain.Entities.LeakSightAPI;
 
 public class Nome
@@ -16,7 +19,8 @@ public class Nome
         public string nome { get; set; }
         public string tipo { get; set; }
         public string logr { get; set; }
-        public int num { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? num { get; set; }
         public object compl { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
@@ -43,13 +47,15 @@ public class Nome
         public string complemento { get; set; }
         public string pessoa { get; set; }
         public int? fone { get; set; }
-        public long? cns { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? cns { get; set; }
         public string sexo { get; set; }
         public string raca_cor { get; set; }
         public int? falecido { get; set; }
         public string data_falecimento { get; set; }
         public string pai { get; set; }
-        public long? celular { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? celular { get; set; }
         public string contato { get; set; }
         public string email { get; set; }
         public string rg { get; set; }
@@ -87,7 +93,8 @@ public class Nome
         public string complemento { get; set; }
         public string celular3 { get; set; }
         public string celular4 { get; set; }
-        public long? celular5 { get; set; }
+        [JsonConverter(typeof(StringOrNumberConverter))]
+        public string? celular5 { get; set; }
         public string modelo_veiculo1 { get; set; }
         public int? ano_veiculo1 { get; set; }
     }
