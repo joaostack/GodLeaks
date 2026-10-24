@@ -37,6 +37,9 @@ public sealed class StringOrNumberConverter : JsonConverterFactory
                 ? reader.GetString()
                 : reader.GetDecimal().ToString(CultureInfo.InvariantCulture);
 
+            if (string.IsNullOrWhiteSpace(text))
+                return default;
+
             if (TargetType == typeof(string))
                 return (T?)(object?)text;
 
