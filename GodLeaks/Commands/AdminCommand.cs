@@ -2,6 +2,7 @@ using GodLeaks.Application.Interfaces;
 using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using NetCord;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -45,6 +46,37 @@ public class AdminCommand : CommandModule<CommandContext>
         }
 
         await ReplyAsync(string.Join("\n", users.Select(format)));
+    }
+
+    [Command("update_user")]
+    public async Task UpdateUser(string userId, bool isActive, int days)
+    {
+        if (!await CheckPermissionAsync())
+            return;
+
+        if (days < 0 || !ulong.TryParse(userId, out var discordUserId))
+        {
+            await ReplyAsync("Informe um ID válido e uma duração maior que -1.");
+            return;
+        }
+
+        var user = await _dbContext.UserSubscriptions
+            .FirstOrDefaultAsync(u => u.DiscordUserId == discordUserId.ToString());
+
+        if (user is null)
+        {
+            await ReplyAsync("Usuário não encontrado!");
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+
+        user.IsActive = isActive;
+        user.StartedAt = now;
+        user.ExpiresAt = now.AddDays(days);
+        await _dbContext.SaveChangesAsync();
+
+        await ReplyAsync("Usuário atualizado com sucesso!");
     }
 
     [Command("add_user")]
