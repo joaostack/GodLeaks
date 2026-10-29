@@ -27,6 +27,7 @@ public class SenhaCommand : CommandModule<CommandContext>
             return;
         }
 
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
         var response = await _leakSight.SearchPassword(senha);
         
         if (response.MachinesStealer.Count == 0 && response.stealer.Count == 0)

@@ -17,7 +17,8 @@ public class ComandosCommand : CommandModule<CommandContext>
         ("!placa", "Consulta placa de veículo"),
         ("!nome", "Consulta nome completo"),
         ("!senha", "Consulta senha"),
-        ("!url", "Consulta logins de uma URL")
+        ("!url", "Consulta logins de uma URL"),
+        ("!telefone", "Consulta telefone")
     ];
 
     [Command("comandos")]

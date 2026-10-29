@@ -27,7 +27,7 @@ public class EmailCommand : CommandModule<CommandContext>
             return;
         }
 
-        await Context.Channel.SendMessageAsync("🔎 Buscando...");
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
         var response = await _leakSight.SearchEmail(email);
 
         if (response?.database_url is not { Count: > 0 })

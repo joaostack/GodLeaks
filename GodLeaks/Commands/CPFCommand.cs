@@ -30,7 +30,7 @@ public class CPFCommand : CommandModule<CommandContext>
             return;
         }
 
-        await Context.Channel.SendMessageAsync("🔎 Buscando...");
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
 
         var digits = new string(cpf.Where(char.IsDigit).ToArray());
 

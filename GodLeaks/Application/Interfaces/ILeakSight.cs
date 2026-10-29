@@ -11,4 +11,5 @@ public interface ILeakSight
     Task<Nome.Root> SearchNome(string nome);
     Task<Password.Root> SearchPassword(string password);
     Task<Url.Root> SearchUrl(string url);
+    Task<Telefone.Root> SearchPhone(string phone);
 }

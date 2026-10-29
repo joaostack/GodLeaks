@@ -27,6 +27,7 @@ public class UrlCommand : CommandModule<CommandContext>
             return;
         }
         
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
         var response = await _leakSight.SearchUrl(url);
         
         var sb = new StringBuilder();

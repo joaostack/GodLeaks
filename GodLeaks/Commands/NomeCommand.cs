@@ -28,6 +28,7 @@ public class NomeCommand : CommandModule<CommandContext>
             return;
         }
 
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
         var response = await _leakSight.SearchNome(nome);
 
         if (response is null)

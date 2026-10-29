@@ -28,7 +28,7 @@ public class PlacaCommand : CommandModule<CommandContext>
             return;
         }
 
-        await Context.Channel.SendMessageAsync("🔎 Buscando...");
+        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
 
         var response = await _leakSight.SearchPlaca(placa);
 

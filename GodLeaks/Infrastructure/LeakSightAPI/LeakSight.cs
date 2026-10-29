@@ -46,6 +46,9 @@ public class LeakSight : ILeakSight
     public Task<Url.Root> SearchUrl(string url) =>
         SearchAsync<Url.Root>("url", url);
 
+    public Task<Telefone.Root> SearchPhone(string phone) =>
+        SearchAsync<Telefone.Root>("number", phone);
+
     private async Task<T> SearchAsync<T>(string endpoint, string query)
     {
         var url = $"osint/{endpoint}?token={Uri.EscapeDataString(_token)}&text={Uri.EscapeDataString(query)}";
