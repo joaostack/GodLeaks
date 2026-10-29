@@ -2,6 +2,7 @@ using GodLeaks.Application.Interfaces;
 using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using NetCord.Rest;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -114,12 +115,40 @@ public class AdminCommand : CommandModule<CommandContext>
 
         var now = DateTime.UtcNow;
 
-        await ListAsync(
-            _dbContext.UserSubscriptions.OrderBy(user => user.ExpiresAt),
-            user => $"**ID**: `{user.Id}` | **UserID:** `{user.DiscordUserId}` | " +
-                    $"**Active:** {(user.IsActive && user.ExpiresAt > now ? "Ativo" : "Inativo")} | " +
-                    $"**Expira:** {user.ExpiresAt:dd/MM/yyyy HH:mm} UTC",
-            "❌ Nenhuma assinatura cadastrada.");
+        var users = await _dbContext.UserSubscriptions.OrderBy(user => user.IsActive).ToListAsync();
+
+        if (users.Count == 0)
+        {
+            await ReplyAsync("❌ Nenhum usuário cadastrado.");
+            return;
+        }
+
+        var tasks = users.Select(async user =>
+        {
+            string nome;
+            if (ulong.TryParse(user.DiscordUserId, out var discordId))
+            {
+                try
+                {
+                    var discordUser = await Context.Client.Rest.GetUserAsync(discordId);
+                    nome = discordUser.Username;
+                }
+                catch
+                {
+                    nome = "Desconhecido";
+                }
+            }
+            else
+            {
+                nome = "ID Inválido";
+            }
+            
+            return
+                $"**Nome**: `{nome}` | **UserID:** `{user.DiscordUserId}` | **Active:** {(user.IsActive ? "Sim" : "Não")}";
+        });
+        
+        var formattedUsers = await Task.WhenAll(tasks);
+        await ReplyAsync(string.Join("\n", formattedUsers));
     }
 
     [Command("list_admins")]
@@ -128,11 +157,40 @@ public class AdminCommand : CommandModule<CommandContext>
         if (!await CheckPermissionAsync())
             return;
 
-        await ListAsync(
-            _dbContext.Admins.OrderBy(user => user.IsActive),
-            user => $"**UserID:** `{user.DiscordUserId}` | " +
-                    $"**Active:** {(user.IsActive ? "Sim" : "Não")}",
-            "❌ Nenhum admin cadastrado.");
+        var admins = await _dbContext.Admins.OrderBy(user => user.IsActive).ToListAsync();
+
+        if (admins.Count == 0)
+        {
+            await ReplyAsync("❌ Nenhum admin cadastrado.");
+            return;
+        }
+
+        var tasks = admins.Select(async admin =>
+        {
+            string nome;
+            if (ulong.TryParse(admin.DiscordUserId, out var discordId))
+            {
+                try
+                {
+                    var discordUser = await Context.Client.Rest.GetUserAsync(discordId);
+                    nome = discordUser.Username;
+                }
+                catch
+                {
+                    nome = "Desconhecido";
+                }
+            }
+            else
+            {
+                nome = "ID Inválido";
+            }
+
+            return
+                $"**Nome**: `{nome}` | **UserID:** `{admin.DiscordUserId}` | **Active:** {(admin.IsActive ? "Sim" : "Não")}";
+        });
+
+        var formattedAdmins = await Task.WhenAll(tasks);
+        await ReplyAsync(string.Join("\n", formattedAdmins));
     }
 
     [Command("remove_user")]
