@@ -34,7 +34,7 @@ public class UrlCommand : CommandModule<CommandContext>
 
         if (response is null || response.sucess == null)
         {
-            await ReplyAsync("Nenhum resultado encontrado.");
+            await ReplyAsync(CommandMessages.NoResults);
             return;
         }
         
@@ -50,7 +50,7 @@ public class UrlCommand : CommandModule<CommandContext>
 
         await Context.Channel.SendMessageAsync(new MessageProperties()
         {
-            Content = $"Leaks encontrados para a url **{url}**:",
+            Content = $"✅ **Busca finalizada!** Encontrei resultados para `{url}` e organizei tudo no arquivo em anexo. 🌐📄",
             Attachments = [new AttachmentProperties($"{url}.txt", stream)],
         });
     }

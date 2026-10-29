@@ -36,7 +36,7 @@ public class CPFCommand : CommandModule<CommandContext>
 
         if (digits.Length != 11)
         {
-            await SendTextAsync("O CPF deve conter 11 dígitos.");
+            await SendTextAsync("⚠️ **CPF inválido!** Informe um CPF com exatamente 11 dígitos.");
             return;
         }
 
@@ -45,7 +45,7 @@ public class CPFCommand : CommandModule<CommandContext>
         if (response is null)
         {
             await SendTextAsync(
-                "Não foi possível obter os resultados da consulta.");
+                "🚧 **Não foi possível concluir a consulta agora.** Tente novamente daqui a pouco.");
             return;
         }
 
@@ -197,7 +197,7 @@ public class CPFCommand : CommandModule<CommandContext>
         if (!hasResults)
         {
             await SendTextAsync(
-                "Nenhum resultado encontrado para o CPF informado.");
+                CommandMessages.NoResults);
             return;
         }
 
@@ -206,7 +206,7 @@ public class CPFCommand : CommandModule<CommandContext>
 
         var message = new MessageProperties
         {
-            Content = $"Consulta CPF {cpf}",
+            Content = $"✅ **Consulta concluída!** Organizei os resultados do CPF `{cpf}` no arquivo em anexo. 📄",
             Attachments =
             [
                 new AttachmentProperties($"{cpf}.txt", stream)

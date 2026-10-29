@@ -39,19 +39,20 @@ public class ComandosCommand : CommandModule<CommandContext>
     private static string BuildCommandsMessage()
     {
         var message = new StringBuilder()
-            .AppendLine("**GodLeaks | Central de comandos**")
+            .AppendLine("✨ **GodLeaks | Central de comandos** ✨")
+            .AppendLine("Escolha uma consulta e deixe o restante com a gente! 🚀")
             .AppendLine();
 
         foreach (var (command, description) in Commands)
         {
-            message.Append('`')
+            message.Append("🔹 `")
                 .Append(command)
-                .Append("` - ")
+                .Append("` — ")
                 .AppendLine(description);
         }
 
         return message.AppendLine()
-            .Append($"**Total:** {Commands.Length} comandos")
+            .Append($"📚 **Total:** {Commands.Length} comandos disponíveis")
             .ToString();
     }
 }

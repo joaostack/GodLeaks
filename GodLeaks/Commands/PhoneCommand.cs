@@ -32,7 +32,7 @@ public class PhoneCommand : CommandModule<CommandContext>
 
         if (response.Brazil_575M is null || response.Brazil_575M.Count == 0)
         {
-            await ReplyAsync("Nenhum resultado encontrado.");
+            await ReplyAsync(CommandMessages.NoResults);
             return;
         }
         
@@ -59,7 +59,7 @@ public class PhoneCommand : CommandModule<CommandContext>
 
         await Context.Channel.SendMessageAsync(new MessageProperties
         {
-            Content = $"Consulta concluída. Total de registros: {response.Brazil_575M.Count}.",
+            Content = $"✅ **Busca finalizada!** Encontrei **{response.Brazil_575M.Count} registros** e organizei tudo no arquivo em anexo. 📱📄",
             Attachments = [new AttachmentProperties("consulta-telefone.txt", stream)]
         });
     }

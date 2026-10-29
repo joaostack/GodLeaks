@@ -33,7 +33,7 @@ public class NomeCommand : CommandModule<CommandContext>
 
         if (response is null)
         {
-            await ReplyAsync("Nenhum resultado encontrado.");
+            await ReplyAsync(CommandMessages.NoResults);
             return;
         }
 
@@ -146,7 +146,7 @@ public class NomeCommand : CommandModule<CommandContext>
 
         if (sb.Length == 0)
         {
-            await ReplyAsync("Nenhum resultado encontrado.");
+            await ReplyAsync(CommandMessages.NoResults);
             return;
         }
 
@@ -156,7 +156,7 @@ public class NomeCommand : CommandModule<CommandContext>
 
         await ReplyAsync(new ReplyMessageProperties
         {
-            Content = "Consulta concluída.",
+            Content = "✅ **Busca finalizada!** Seus resultados estão organizados no arquivo em anexo. 📄✨",
             Attachments = [arquivo]
         });
     }

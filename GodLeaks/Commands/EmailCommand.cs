@@ -32,7 +32,7 @@ public class EmailCommand : CommandModule<CommandContext>
 
         if (response?.database_url is not { Count: > 0 })
         {
-            await Context.Channel.SendMessageAsync("No results found!");
+            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
             return;
         }
 
@@ -50,7 +50,7 @@ public class EmailCommand : CommandModule<CommandContext>
 
         await Context.Channel.SendMessageAsync(new MessageProperties()
         {
-            Content = $"Leaks encontrados para o e-mail **{email}**:",
+            Content = $"✅ **Busca finalizada!** Encontrei resultados para `{email}` e deixei tudo organizado no arquivo. 📄✨",
             Attachments = [new AttachmentProperties($"{email}.txt", stream)],
         });
     }

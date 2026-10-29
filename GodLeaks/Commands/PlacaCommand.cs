@@ -35,7 +35,7 @@ public class PlacaCommand : CommandModule<CommandContext>
         if (response?.dados is null || response.dados.Count == 0)
         {
             await Context.Channel.SendMessageAsync(
-                "Nenhum resultado encontrado para essa placa."
+                CommandMessages.NoResults
             );
 
             return;
@@ -119,7 +119,7 @@ public class PlacaCommand : CommandModule<CommandContext>
         await Context.Channel.SendMessageAsync(
             new MessageProperties
             {
-                Content = $"Consulta concluída. Total de registros: {response.dados.Count}.",
+                Content = $"✅ **Busca finalizada!** Encontrei **{response.dados.Count} registros** para essa placa e organizei tudo no arquivo. 🚘📄",
                 Attachments = [new AttachmentProperties(fileName, stream)]
             }
         );

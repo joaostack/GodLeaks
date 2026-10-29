@@ -32,7 +32,7 @@ public class UsernameCommand : CommandModule<CommandContext>
 
         if (response?.database_url is not { Count: > 0 })
         {
-            await Context.Channel.SendMessageAsync("No results found!");
+            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
             return;
         }
 
@@ -50,7 +50,7 @@ public class UsernameCommand : CommandModule<CommandContext>
 
         await Context.Channel.SendMessageAsync(new MessageProperties()
         {
-            Content = $"Leaks encontrados para o usuário **{username}**:",
+            Content = $"✅ **Busca finalizada!** Encontrei resultados para `{username}` e organizei tudo no arquivo em anexo. 👤📄",
             Attachments = [new AttachmentProperties($"{username}.txt", stream)],
         });
     }

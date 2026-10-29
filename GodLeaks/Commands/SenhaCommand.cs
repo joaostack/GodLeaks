@@ -32,7 +32,7 @@ public class SenhaCommand : CommandModule<CommandContext>
         
         if (response.MachinesStealer.Count == 0 && response.stealer.Count == 0)
         {
-            await Context.Channel.SendMessageAsync("No results found!");
+            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
             return;
         }
 
@@ -62,7 +62,7 @@ public class SenhaCommand : CommandModule<CommandContext>
 
         await Context.Channel.SendMessageAsync(new MessageProperties()
         {
-            Content = $"Leaks encontrados para a senha **{senha}**:",
+            Content = $"✅ **Busca finalizada!** Encontrei resultados para essa senha e organizei tudo no arquivo em anexo. 🔐📄",
             Attachments = [new AttachmentProperties($"{senha}.txt", stream)],
         });
     }

@@ -2,7 +2,6 @@ using GodLeaks.Application.Interfaces;
 using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using NetCord;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -23,7 +22,7 @@ public class AdminCommand : CommandModule<CommandContext>
         if (await _admin.HasAccessAsync(Context.User.Id))
             return true;
 
-        await ReplyAsync("Você não possui permissão para usar este comando!");
+        await ReplyAsync("❌ Você não possui permissão para usar este comando!");
         return false;
     }
 
@@ -56,7 +55,7 @@ public class AdminCommand : CommandModule<CommandContext>
 
         if (days < 0 || !ulong.TryParse(userId, out var discordUserId))
         {
-            await ReplyAsync("Informe um ID válido e uma duração maior que -1.");
+            await ReplyAsync("❌ Informe um ID válido e uma duração maior que -1.");
             return;
         }
 
@@ -65,7 +64,7 @@ public class AdminCommand : CommandModule<CommandContext>
 
         if (user is null)
         {
-            await ReplyAsync("Usuário não encontrado!");
+            await ReplyAsync("❌ Usuário não encontrado!");
             return;
         }
 
@@ -76,7 +75,7 @@ public class AdminCommand : CommandModule<CommandContext>
         user.ExpiresAt = now.AddDays(days);
         await _dbContext.SaveChangesAsync();
 
-        await ReplyAsync("Usuário atualizado com sucesso!");
+        await ReplyAsync("✅ Usuário atualizado com sucesso!");
     }
 
     [Command("add_user")]
@@ -87,7 +86,7 @@ public class AdminCommand : CommandModule<CommandContext>
 
         if (days <= 0 || !ulong.TryParse(userId, out _))
         {
-            await ReplyAsync("Informe um ID válido e uma duração maior que zero.");
+            await ReplyAsync("❌ Informe um ID válido e uma duração maior que zero.");
             return;
         }
 
@@ -104,7 +103,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await _dbContext.UserSubscriptions.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
-        await ReplyAsync($"Usuário `{userId}` adicionado por {days} dias.");
+        await ReplyAsync($"✅ Usuário `{userId}` adicionado por {days} dias.");
     }
 
     [Command("list_users")]
@@ -120,7 +119,7 @@ public class AdminCommand : CommandModule<CommandContext>
             user => $"**ID**: `{user.Id}` | **UserID:** `{user.DiscordUserId}` | " +
                     $"**Active:** {(user.IsActive && user.ExpiresAt > now ? "Ativo" : "Inativo")} | " +
                     $"**Expira:** {user.ExpiresAt:dd/MM/yyyy HH:mm} UTC",
-            "Nenhuma assinatura cadastrada.");
+            "❌ Nenhuma assinatura cadastrada.");
     }
 
     [Command("list_admins")]
@@ -133,7 +132,7 @@ public class AdminCommand : CommandModule<CommandContext>
             _dbContext.Admins.OrderBy(user => user.IsActive),
             user => $"**UserID:** `{user.DiscordUserId}` | " +
                     $"**Active:** {(user.IsActive ? "Sim" : "Não")}",
-            "Nenhum admin cadastrado.");
+            "❌ Nenhum admin cadastrado.");
     }
 
     [Command("remove_user")]
@@ -146,13 +145,13 @@ public class AdminCommand : CommandModule<CommandContext>
 
         if (user is null)
         {
-            await ReplyAsync("Usuário não encontrado!");
+            await ReplyAsync("❌ Usuário não encontrado!");
             return;
         }
 
         _dbContext.UserSubscriptions.Remove(user);
         await _dbContext.SaveChangesAsync();
 
-        await ReplyAsync($"Usuário '{userId}' removido!");
+        await ReplyAsync($"✅ Usuário '{userId}' removido!");
     }
 }
