@@ -131,6 +131,7 @@ O prefixo padrão é `!`. Os parâmetros abaixo são exemplos de formato; use ap
 | `!nome` | nome completo | assinatura | Consulta dados relacionados a um nome. |
 | `!placa` | placa | assinatura | Consulta dados de veículo. |
 | `!senha` | senha | assinatura | Consulta ocorrências associadas à senha. |
+| `!telefone` | telefone | assinatura | Consulta telefone. |
 | `!url` | URL | assinatura | Consulta logins relacionados a uma URL. |
 | `!add_user` | Discord User ID, dias | admin | Cria uma assinatura ativa. Ex.: `!add_user 123456789012345678 30`. |
 | `!update_user` | Discord User ID, ativo, dias | admin | Atualiza o estado e a validade. Ex.: `!update_user 123456789012345678 true 30`. |
