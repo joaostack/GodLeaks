@@ -39,8 +39,8 @@ public class ComandosCommand : CommandModule<CommandContext>
     private static string BuildCommandsMessage()
     {
         var message = new StringBuilder()
-            .AppendLine("✨ **GodLeaks | Central de comandos** ✨")
-            .AppendLine("Escolha uma consulta e deixe o restante com a gente! 🚀")
+            .AppendLine("💀 **GodLeaks | Central de comandos** 💀")
+            .AppendLine("Escolha uma consulta e deixe o restante com a gente!")
             .AppendLine();
 
         foreach (var (command, description) in Commands)
