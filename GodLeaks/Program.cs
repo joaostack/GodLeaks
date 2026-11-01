@@ -1,4 +1,5 @@
-﻿using GodLeaks.Infrastructure.DependencyInjection;
+﻿using GodLeaks.Handlers;
+using GodLeaks.Infrastructure.DependencyInjection;
 using GodLeaks.Logging;
 using GodLeaks.Presentation.Console;
 using GodLeaks.Infrastructure.Persistence;
@@ -10,6 +11,7 @@ using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.Commands;
+using NetCord.Services.Commands;
 using Spectre.Console;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -33,7 +35,10 @@ builder
         options.Intents = GatewayIntents.All;
         options.Token = token;
     })
-    .AddCommands();
+    .AddCommands(options =>
+    {
+        options.ResultHandler = new CustomCommandResultHandler<CommandContext>();
+    });
 
 var host = builder.Build();
 
