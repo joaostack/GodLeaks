@@ -2,7 +2,6 @@ using GodLeaks.Application.Interfaces;
 using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using NetCord.Rest;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -27,12 +26,12 @@ public class AdminCommand : CommandModule<CommandContext>
         return false;
     }
 
-    private async Task ReplyAsync(string message)
-    {
-        await Context.Channel.SendMessageAsync(message);
-    }
+    // private async Task ReplyAsync(string message)
+    // {
+    //     await Context.Channel.SendMessageAsync(message);
+    // }
 
-    private async Task ListAsync<T>(
+    /*private async Task ListAsync<T>(
         IQueryable<T> query,
         Func<T, string> format,
         string emptyMessage)
@@ -46,7 +45,7 @@ public class AdminCommand : CommandModule<CommandContext>
         }
 
         await ReplyAsync(string.Join("\n", users.Select(format)));
-    }
+    }*/
 
     [Command("update_user")]
     public async Task UpdateUser(string userId, bool isActive, int days)
@@ -142,11 +141,11 @@ public class AdminCommand : CommandModule<CommandContext>
             {
                 nome = "ID Inválido";
             }
-            
+
             return
                 $"**Nome**: `{nome}` | **UserID:** `{user.DiscordUserId}` | **Active:** {(user.IsActive ? "Sim" : "Não")}";
         });
-        
+
         var formattedUsers = await Task.WhenAll(tasks);
         await ReplyAsync(string.Join("\n", formattedUsers));
     }
