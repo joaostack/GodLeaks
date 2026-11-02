@@ -6,37 +6,30 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class PlacaCommand : CommandModule<CommandContext>
+public class PlacaCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public PlacaCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("placa")]
     public async Task PlacaAsync(string placa)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
 
         var response = await _leakSight.SearchPlaca(placa);
 
         if (response?.dados is null || response.dados.Count == 0)
         {
-            await Context.Channel.SendMessageAsync(
-                CommandMessages.NoResults
-            );
+            await SendNoResultsAsync();
 
             return;
         }

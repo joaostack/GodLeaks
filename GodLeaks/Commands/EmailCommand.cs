@@ -5,34 +5,29 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class EmailCommand : CommandModule<CommandContext>
+public class EmailCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public EmailCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("email")]
     public async Task SendEmail(string email)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
         var response = await _leakSight.SearchEmail(email);
 
         if (response?.database_url is not { Count: > 0 })
         {
-            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
+            await SendNoResultsAsync();
             return;
         }
 

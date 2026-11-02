@@ -7,30 +7,26 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class CPFCommand : CommandModule<CommandContext>
+public class CPFCommand : SubscriptionCommandModule
 {
     private static readonly CultureInfo PtBr =
         CultureInfo.GetCultureInfo("pt-BR");
 
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public CPFCommand(ILeakSight leakSight, ISubscriptionService subscription)
+        : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("cpf")]
     public async Task CPF(string cpf)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
 
         var digits = new string(cpf.Where(char.IsDigit).ToArray());
 

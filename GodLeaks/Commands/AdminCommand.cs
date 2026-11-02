@@ -26,27 +26,6 @@ public class AdminCommand : CommandModule<CommandContext>
         return false;
     }
 
-    // private async Task ReplyAsync(string message)
-    // {
-    //     await Context.Channel.SendMessageAsync(message);
-    // }
-
-    /*private async Task ListAsync<T>(
-        IQueryable<T> query,
-        Func<T, string> format,
-        string emptyMessage)
-    {
-        var users = await query.ToListAsync();
-
-        if (users.Count == 0)
-        {
-            await ReplyAsync(emptyMessage);
-            return;
-        }
-
-        await ReplyAsync(string.Join("\n", users.Select(format)));
-    }*/
-
     [Command("update_user")]
     public async Task UpdateUser(string userId, bool isActive, int days)
     {

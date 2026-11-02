@@ -5,36 +5,31 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class UrlCommand : CommandModule<CommandContext>
+public class UrlCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public UrlCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("url")]
     public async Task Url(string url)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
         
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
         var response = await _leakSight.SearchUrl(url);
         
         var sb = new StringBuilder();
 
         if (response is null || response.sucess == null)
         {
-            await ReplyAsync(CommandMessages.NoResults);
+            await SendNoResultsAsync();
             return;
         }
         

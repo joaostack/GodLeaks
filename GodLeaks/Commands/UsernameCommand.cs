@@ -5,34 +5,29 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class UsernameCommand : CommandModule<CommandContext>
+public class UsernameCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public UsernameCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("username")]
     public async Task Username(string username)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
         var response = await _leakSight.SearchUsername(username);
 
         if (response?.database_url is not { Count: > 0 })
         {
-            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
+            await SendNoResultsAsync();
             return;
         }
 

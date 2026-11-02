@@ -5,34 +5,29 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class SenhaCommand : CommandModule<CommandContext>
+public class SenhaCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
     
     public SenhaCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
     
     [Command("senha")]
     public async Task Senha(string senha)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
         var response = await _leakSight.SearchPassword(senha);
         
         if (response.MachinesStealer.Count == 0 && response.stealer.Count == 0)
         {
-            await Context.Channel.SendMessageAsync(CommandMessages.NoResults);
+            await SendNoResultsAsync();
             return;
         }
 

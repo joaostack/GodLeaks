@@ -5,34 +5,29 @@ using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class PhoneCommand : CommandModule<CommandContext>
+public class PhoneCommand : SubscriptionCommandModule
 {
     private readonly ILeakSight _leakSight;
-    private readonly ISubscriptionService _subscription;
 
     public PhoneCommand(
         ILeakSight leakSight,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription) : base(subscription)
     {
         _leakSight = leakSight;
-        _subscription = subscription;
     }
 
     [Command("telefone")]
     public async Task Phone(string phone)
     {
-        if (!await _subscription.HasAccessAsync(Context.User.Id))
-        {
-            await Context.Channel.SendMessageAsync(CommandMessages.InactiveSubscription);
+        if (!await EnsureSubscriptionAsync())
             return;
-        }
 
-        await Context.Channel.SendMessageAsync(CommandMessages.Searching);
+        await StartSearchAsync();
         var response = await _leakSight.SearchPhone(phone);
 
         if (response.Brazil_575M is null || response.Brazil_575M.Count == 0)
         {
-            await ReplyAsync(CommandMessages.NoResults);
+            await SendNoResultsAsync();
             return;
         }
         
