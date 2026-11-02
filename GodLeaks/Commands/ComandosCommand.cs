@@ -55,7 +55,7 @@ public class ComandosCommand : CommandModule<CommandContext>
         {
             Title = "👑 Menu Principal de Consultas",
             Description = descriptionBuilder.ToString(),
-            Color = new Color(0x3498DB),
+            Color = new Color(0xFF00FF),
 
             Image = new EmbedImageProperties(url: $"attachment://{ImageFileName}"),
 
