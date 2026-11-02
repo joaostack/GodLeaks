@@ -145,7 +145,7 @@ Assinaturas são consideradas válidas quando `IsActive = true` e `ExpiresAt` ai
 
 ```text
 GodLeaks/
-├── Commands/                         # Módulos de comandos NetCord
+├── Commands/                         # Módulos e fluxo comum dos comandos
 ├── Application/
 │   ├── Interfaces/                   # Contratos de serviços
 │   └── Services/                     # Assinaturas e autorização de admins
@@ -161,9 +161,12 @@ GodLeaks/
 └── appsettings.json                  # Configurações não secretas
 ```
 
+Os comandos que exigem assinatura herdam de `SubscriptionCommandModule`, que centraliza a validação de acesso e as mensagens de início e ausência de resultados. Cada comando mantém a consulta e a formatação próprias.
+
 Principais pontos de extensão:
 
-- Para adicionar um comando, crie uma classe em `Commands/`, herde de `CommandModule<CommandContext>` e use o atributo `[Command("nome")]`.
+- Para adicionar um comando público ou administrativo, crie uma classe em `Commands/`, herde de `CommandModule<CommandContext>` e use o atributo `[Command("nome")]`.
+- Para adicionar um comando que exige assinatura, herde de `SubscriptionCommandModule` e use `EnsureSubscriptionAsync()` antes da consulta. Use `StartSearchAsync()` e `SendNoResultsAsync()` para manter as mensagens comuns.
 - Para adicionar uma consulta à LeakSight, atualize `ILeakSight`, implemente o método em `LeakSight` e crie/ajuste o modelo correspondente em `Domain/Entities/LeakSightAPI/`.
 - Para alterar persistência, ajuste `GodLeaksDbContext`, crie uma migration e atualize os serviços que usam o contexto.
 - O registro de serviços fica em `AddServerCtlServices()`; mantenha dependências externas fora dos módulos de comando quando possível.
