@@ -1,4 +1,5 @@
 using System.Text;
+using NetCord;
 using NetCord.Rest;
 using NetCord.Services.Commands;
 
@@ -26,33 +27,42 @@ public class ComandosCommand : CommandModule<CommandContext>
     {
         var channel = Context?.Channel
                       ?? throw new InvalidOperationException("The command context does not contain a channel.");
+        
         await using var stream = File.OpenRead(ImagePath);
+
         var messageProperties = new MessageProperties
         {
+            Content = "💀 **GodLeaks | Central de comandos** 💀",
             Attachments = [new AttachmentProperties(ImageFileName, stream)],
-            Content = BuildCommandsMessage()
+            Embeds = [BuildEmbedMenu()]
         };
 
         await channel.SendMessageAsync(messageProperties);
     }
 
-    private static string BuildCommandsMessage()
+    private static EmbedProperties BuildEmbedMenu()
     {
-        var message = new StringBuilder()
-            .AppendLine("💀 **GodLeaks | Central de comandos** 💀")
+        var descriptionBuilder = new StringBuilder()
             .AppendLine("Escolha uma consulta e deixe o restante com a gente!")
             .AppendLine();
 
         foreach (var (command, description) in Commands)
         {
-            message.Append("🔹 `")
-                .Append(command)
-                .Append("` — ")
-                .AppendLine(description);
+            descriptionBuilder.AppendLine($"🔹 `{command}` — {description}");
         }
 
-        return message.AppendLine()
-            .Append($"📚 **Total:** {Commands.Length} comandos disponíveis")
-            .ToString();
+        descriptionBuilder.AppendLine()
+            .Append($"📚 **Total:** {Commands.Length} comandos disponíveis");
+
+        return new EmbedProperties
+        {
+            Title = "👑 Menu Principal de Consultas",
+            Description = descriptionBuilder.ToString(),
+            Color = new Color(0x3498DB),
+            
+            Image = new EmbedImageProperties(url: $"attachment://{ImageFileName}"),
+            
+            Timestamp = DateTimeOffset.UtcNow
+        };
     }
 }
