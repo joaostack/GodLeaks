@@ -25,9 +25,6 @@ public class ComandosCommand : CommandModule<CommandContext>
     [Command("comandos")]
     public async ValueTask ComandosAsync()
     {
-        var channel = Context?.Channel
-                      ?? throw new InvalidOperationException("The command context does not contain a channel.");
-        
         await using var stream = File.OpenRead(ImagePath);
 
         var messageProperties = new MessageProperties
@@ -37,7 +34,7 @@ public class ComandosCommand : CommandModule<CommandContext>
             Embeds = [BuildEmbedMenu()]
         };
 
-        await channel.SendMessageAsync(messageProperties);
+        await Context.Message.SendAsync(messageProperties);
     }
 
     private static EmbedProperties BuildEmbedMenu()
@@ -59,9 +56,9 @@ public class ComandosCommand : CommandModule<CommandContext>
             Title = "👑 Menu Principal de Consultas",
             Description = descriptionBuilder.ToString(),
             Color = new Color(0x3498DB),
-            
+
             Image = new EmbedImageProperties(url: $"attachment://{ImageFileName}"),
-            
+
             Timestamp = DateTimeOffset.UtcNow
         };
     }

@@ -43,7 +43,7 @@ public class EmailCommand : SubscriptionCommandModule
         byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
         using MemoryStream stream = new MemoryStream(bytes);
 
-        await Context.Channel.SendMessageAsync(new MessageProperties()
+        await Context.Message.SendAsync(new MessageProperties()
         {
             Content = $"✅ **Busca finalizada!** Encontrei resultados para `{email}` e deixei tudo organizado no arquivo. 📄✨",
             Attachments = [new AttachmentProperties($"{email}.txt", stream)],

@@ -209,12 +209,12 @@ public class CPFCommand : SubscriptionCommandModule
             ]
         };
 
-        await Context.Channel.SendMessageAsync(message);
+        await Context.Message.SendAsync(message);
     }
 
     private async Task SendTextAsync(string message)
     {
-        await Context.Channel.SendMessageAsync(new MessageProperties()
+        await Context.Message.SendAsync(new MessageProperties()
         {
             Content = message
         });

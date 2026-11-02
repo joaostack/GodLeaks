@@ -52,7 +52,7 @@ public class PhoneCommand : SubscriptionCommandModule
         var bytes = Encoding.UTF8.GetBytes(sb.ToString());
         await using var stream = new MemoryStream(bytes);
 
-        await Context.Channel.SendMessageAsync(new MessageProperties
+        await Context.Message.SendAsync(new MessageProperties
         {
             Content = $"✅ **Busca finalizada!** Encontrei **{response.Brazil_575M.Count} registros** e organizei tudo no arquivo em anexo. 📱📄",
             Attachments = [new AttachmentProperties("consulta-telefone.txt", stream)]

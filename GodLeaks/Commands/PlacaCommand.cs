@@ -109,7 +109,7 @@ public class PlacaCommand : SubscriptionCommandModule
 
         var fileName = $"consulta-placa-{placa}.txt";
 
-        await Context.Channel.SendMessageAsync(
+        await Context.Message.SendAsync(
             new MessageProperties
             {
                 Content = $"✅ **Busca finalizada!** Encontrei **{response.dados.Count} registros** para essa placa e organizei tudo no arquivo. 🚘📄",

@@ -30,6 +30,9 @@ public class CustomCommandResultHandler<TContext>
             await context.Message.SendAsync(
                 "❌ **Erro ao executar comando!**"
             );
+            await context.Message.SendAsync(
+                exceptionResult.Message
+            );
         }
         else
         {

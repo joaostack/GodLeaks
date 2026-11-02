@@ -2,6 +2,7 @@
   "profiles": {
     "GodLeaks": {
       "commandName": "Project",
+      "workingDirectory": "D:\\Projects\\GodLeaks\\GodLeaks",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

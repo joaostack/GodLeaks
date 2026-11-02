@@ -43,7 +43,7 @@ public class UsernameCommand : SubscriptionCommandModule
         byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
         using MemoryStream stream = new MemoryStream(bytes);
 
-        await Context.Channel.SendMessageAsync(new MessageProperties()
+        await Context.Message.SendAsync(new MessageProperties()
         {
             Content = $"✅ **Busca finalizada!** Encontrei resultados para `{username}` e organizei tudo no arquivo em anexo. 👤📄",
             Attachments = [new AttachmentProperties($"{username}.txt", stream)],
