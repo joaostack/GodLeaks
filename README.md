@@ -1,5 +1,7 @@
 # GodLeaks
 
+<img width="1983" height="793" alt="GodLeaks_ Shadow Network Intelligence" src="https://github.com/user-attachments/assets/dc971b98-eedd-4259-88d1-e85dcc5e0a21" />
+
 Bot do Discord escrito em C#/.NET para consultar a API LeakSight. O projeto possui controle de acesso por assinatura, administração de usuários e persistência local em SQLite.
 
 > **Aviso importante:** este projeto pode processar dados pessoais e credenciais. Use-o somente com autorização, finalidade legítima e em conformidade com a legislação aplicável, os termos do Discord e os contratos da API utilizada. Não use o bot para doxxing, perseguição, fraude, invasão ou compartilhamento indevido de dados.
