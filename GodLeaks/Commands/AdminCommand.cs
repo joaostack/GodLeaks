@@ -31,9 +31,9 @@ public class AdminCommand : CommandModule<CommandContext>
     public async Task UpdateUser(
         string userId,
         bool isActive,
-        int days,
-        CancellationToken cancellationToken = default)
+        int days)
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -67,9 +67,9 @@ public class AdminCommand : CommandModule<CommandContext>
     [Command("add_user")]
     public async Task AddUser(
         string userId,
-        int days,
-        CancellationToken cancellationToken = default)
+        int days)
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -115,8 +115,9 @@ public class AdminCommand : CommandModule<CommandContext>
     }
 
     [Command("list_users")]
-    public async Task ListUsers(CancellationToken cancellationToken = default)
+    public async Task ListUsers()
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -147,8 +148,9 @@ public class AdminCommand : CommandModule<CommandContext>
     }
 
     [Command("list_admins")]
-    public async Task ListAdmins(CancellationToken cancellationToken = default)
+    public async Task ListAdmins()
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -177,9 +179,9 @@ public class AdminCommand : CommandModule<CommandContext>
 
     [Command("remove_user")]
     public async Task RemoveUser(
-        string userId,
-        CancellationToken cancellationToken = default)
+        string userId)
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -208,9 +210,9 @@ public class AdminCommand : CommandModule<CommandContext>
 
     [Command("ban_user")]
     public async Task BanUser(
-        string userId,
-        CancellationToken cancellationToken = default)
+        string userId)
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
@@ -225,9 +227,9 @@ public class AdminCommand : CommandModule<CommandContext>
 
     [Command("unban_user")]
     public async Task UnbanUser(
-        string userId,
-        CancellationToken cancellationToken = default)
+        string userId)
     {
+        var cancellationToken = CancellationToken.None;
         if (!await CheckPermissionAsync(cancellationToken))
             return;
 
