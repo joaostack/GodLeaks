@@ -134,5 +134,4 @@ O repositório não contém testes automatizados no momento.
 - Antes de usar em produção, revise permissões, política da LeakSight e controles de acesso, auditoria e limitação de uso.
 
 ## Licença
-
-Não há arquivo de licença versionado neste repositório. Consulte o responsável pelo projeto sobre os termos de uso e distribuição.
+MIT
