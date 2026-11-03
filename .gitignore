@@ -4,7 +4,8 @@ obj/
 .idea/
 godleaks.db
 godleaks.
-Migrations/
+!GodLeaks/Migrations/
+!GodLeaks/Migrations/**
 godleaks.db-shm
 godleaks.db-wal
 dotnet-tools.json
