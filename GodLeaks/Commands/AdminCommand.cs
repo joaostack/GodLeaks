@@ -17,9 +17,10 @@ public class AdminCommand : CommandModule<CommandContext>
         _admin = admin;
     }
 
-    private async Task<bool> CheckPermissionAsync()
+    private async Task<bool> CheckPermissionAsync(
+        CancellationToken cancellationToken = default)
     {
-        if (await _admin.HasAccessAsync(Context.User.Id))
+        if (await _admin.HasAccessAsync(Context.User.Id, cancellationToken))
             return true;
 
         await ReplyAsync("❌ Você não possui permissão para usar este comando!");
@@ -27,19 +28,25 @@ public class AdminCommand : CommandModule<CommandContext>
     }
 
     [Command("update_user")]
-    public async Task UpdateUser(string userId, bool isActive, int days)
+    public async Task UpdateUser(
+        string userId,
+        bool isActive,
+        int days,
+        CancellationToken cancellationToken = default)
     {
-        if (!await CheckPermissionAsync())
+        if (!await CheckPermissionAsync(cancellationToken))
             return;
 
-        if (days < 0 || !ulong.TryParse(userId, out var discordUserId))
+        if (days <= 0 || !TryParseDiscordUserId(userId, out var discordUserId))
         {
-            await ReplyAsync("❌ Informe um ID válido e uma duração maior que -1.");
+            await ReplyAsync("❌ Informe um ID do Discord válido e uma duração maior que zero.");
             return;
         }
 
         var user = await _dbContext.UserSubscriptions
-            .FirstOrDefaultAsync(u => u.DiscordUserId == discordUserId.ToString());
+            .FirstOrDefaultAsync(
+                u => u.DiscordUserId == discordUserId.ToString(),
+                cancellationToken);
 
         if (user is null)
         {
@@ -47,53 +54,77 @@ public class AdminCommand : CommandModule<CommandContext>
             return;
         }
 
-        var now = DateTime.UtcNow;
-
         user.IsActive = isActive;
-        user.StartedAt = now;
-        user.ExpiresAt = now.AddDays(days);
-        await _dbContext.SaveChangesAsync();
+        user.StartedAt = DateTime.UtcNow;
+        user.ExpiresAt = user.StartedAt.AddDays(days);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await ReplyAsync("✅ Usuário atualizado com sucesso!");
+        await ReplyAsync(
+            $"✅ Usuário `{discordUserId}` atualizado. " +
+            $"Status: {(isActive ? "ativo" : "inativo")} por {days} dias.");
     }
 
     [Command("add_user")]
-    public async Task AddUser(string userId, int days)
+    public async Task AddUser(
+        string userId,
+        int days,
+        CancellationToken cancellationToken = default)
     {
-        if (!await CheckPermissionAsync())
+        if (!await CheckPermissionAsync(cancellationToken))
             return;
 
-        if (days <= 0 || !ulong.TryParse(userId, out _))
+        if (days <= 0 || !TryParseDiscordUserId(userId, out var discordUserId))
         {
-            await ReplyAsync("❌ Informe um ID válido e uma duração maior que zero.");
+            await ReplyAsync("❌ Informe um ID do Discord válido e uma duração maior que zero.");
             return;
         }
 
         var now = DateTime.UtcNow;
+        var discordId = discordUserId.ToString();
+        var user = await _dbContext.UserSubscriptions
+            .FirstOrDefaultAsync(
+                subscription => subscription.DiscordUserId == discordId,
+                cancellationToken);
 
-        var user = new UserSubscription
+        if (user is null)
         {
-            DiscordUserId = userId,
-            IsActive = true,
-            StartedAt = now,
-            ExpiresAt = now.AddDays(days)
-        };
+            user = new UserSubscription
+            {
+                DiscordUserId = discordId,
+                IsActive = true,
+                StartedAt = now,
+                ExpiresAt = now.AddDays(days)
+            };
 
-        await _dbContext.UserSubscriptions.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+            _dbContext.UserSubscriptions.Add(user);
+        }
+        else
+        {
+            var start = user.IsActive && user.ExpiresAt > now
+                ? user.ExpiresAt
+                : now;
 
-        await ReplyAsync($"✅ Usuário `{userId}` adicionado por {days} dias.");
+            user.StartedAt = now;
+            user.ExpiresAt = start.AddDays(days);
+            user.IsActive = true;
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        await ReplyAsync($"✅ Usuário `{discordId}` ativado/adicionado por mais {days} dias.");
     }
 
     [Command("list_users")]
-    public async Task ListUsers()
+    public async Task ListUsers(CancellationToken cancellationToken = default)
     {
-        if (!await CheckPermissionAsync())
+        if (!await CheckPermissionAsync(cancellationToken))
             return;
 
-        var now = DateTime.UtcNow;
-
-        var users = await _dbContext.UserSubscriptions.OrderBy(user => user.IsActive).ToListAsync();
+        var users = await _dbContext.UserSubscriptions
+            .AsNoTracking()
+            .OrderByDescending(user => user.IsActive)
+            .ThenBy(user => user.ExpiresAt)
+            .ToListAsync(cancellationToken);
 
         if (users.Count == 0)
         {
@@ -103,39 +134,28 @@ public class AdminCommand : CommandModule<CommandContext>
 
         var tasks = users.Select(async user =>
         {
-            string nome;
-            if (ulong.TryParse(user.DiscordUserId, out var discordId))
-            {
-                try
-                {
-                    var discordUser = await Context.Client.Rest.GetUserAsync(discordId);
-                    nome = discordUser.Username;
-                }
-                catch
-                {
-                    nome = "Desconhecido";
-                }
-            }
-            else
-            {
-                nome = "ID Inválido";
-            }
+            var nome = await GetUsernameAsync(user.DiscordUserId);
+            var status = user.IsActive && user.ExpiresAt > DateTime.UtcNow
+                ? "ativo"
+                : "inativo";
 
-            return
-                $"**Nome**: `{nome}` | **UserID:** `{user.DiscordUserId}` | **Active:** {(user.IsActive ? "Sim" : "Não")}";
+            return $"`{user.DiscordUserId}` — {nome} — {status} até {user.ExpiresAt:dd/MM/yyyy}";
         });
 
         var formattedUsers = await Task.WhenAll(tasks);
-        await ReplyAsync(string.Join("\n", formattedUsers));
+        await ReplyInChunksAsync("**Usuários cadastrados:**\n" + string.Join("\n", formattedUsers));
     }
 
     [Command("list_admins")]
-    public async Task ListAdmins()
+    public async Task ListAdmins(CancellationToken cancellationToken = default)
     {
-        if (!await CheckPermissionAsync())
+        if (!await CheckPermissionAsync(cancellationToken))
             return;
 
-        var admins = await _dbContext.Admins.OrderBy(user => user.IsActive).ToListAsync();
+        var admins = await _dbContext.Admins
+            .AsNoTracking()
+            .OrderByDescending(admin => admin.IsActive)
+            .ToListAsync(cancellationToken);
 
         if (admins.Count == 0)
         {
@@ -145,39 +165,34 @@ public class AdminCommand : CommandModule<CommandContext>
 
         var tasks = admins.Select(async admin =>
         {
-            string nome;
-            if (ulong.TryParse(admin.DiscordUserId, out var discordId))
-            {
-                try
-                {
-                    var discordUser = await Context.Client.Rest.GetUserAsync(discordId);
-                    nome = discordUser.Username;
-                }
-                catch
-                {
-                    nome = "Desconhecido";
-                }
-            }
-            else
-            {
-                nome = "ID Inválido";
-            }
+            var nome = await GetUsernameAsync(admin.DiscordUserId);
+            var status = admin.IsActive ? "ativo" : "inativo";
 
-            return
-                $"**Nome**: `{nome}` | **UserID:** `{admin.DiscordUserId}` | **Active:** {(admin.IsActive ? "Sim" : "Não")}";
+            return $"`{admin.DiscordUserId}` — {nome} — {status}";
         });
 
         var formattedAdmins = await Task.WhenAll(tasks);
-        await ReplyAsync(string.Join("\n", formattedAdmins));
+        await ReplyInChunksAsync("**Administradores:**\n" + string.Join("\n", formattedAdmins));
     }
 
     [Command("remove_user")]
-    public async Task RemoveUser(int userId)
+    public async Task RemoveUser(
+        string userId,
+        CancellationToken cancellationToken = default)
     {
-        if (!await CheckPermissionAsync())
+        if (!await CheckPermissionAsync(cancellationToken))
             return;
 
-        var user = await _dbContext.UserSubscriptions.FindAsync(userId);
+        if (!TryParseDiscordUserId(userId, out var discordUserId))
+        {
+            await ReplyAsync("❌ Informe um ID do Discord válido.");
+            return;
+        }
+
+        var user = await _dbContext.UserSubscriptions
+            .FirstOrDefaultAsync(
+                subscription => subscription.DiscordUserId == discordUserId.ToString(),
+                cancellationToken);
 
         if (user is null)
         {
@@ -186,8 +201,99 @@ public class AdminCommand : CommandModule<CommandContext>
         }
 
         _dbContext.UserSubscriptions.Remove(user);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await ReplyAsync($"✅ Usuário '{userId}' removido!");
+        await ReplyAsync($"✅ Usuário `{discordUserId}` removido!");
     }
+
+    [Command("ban_user")]
+    public async Task BanUser(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await CheckPermissionAsync(cancellationToken))
+            return;
+
+        var user = await FindUserAsync(userId, cancellationToken);
+        if (user is null)
+            return;
+
+        user.IsActive = false;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        await ReplyAsync($"✅ Usuário `{user.DiscordUserId}` bloqueado.");
+    }
+
+    [Command("unban_user")]
+    public async Task UnbanUser(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await CheckPermissionAsync(cancellationToken))
+            return;
+
+        var user = await FindUserAsync(userId, cancellationToken);
+        if (user is null)
+            return;
+
+        if (user.ExpiresAt <= DateTime.UtcNow)
+        {
+            await ReplyAsync("❌ A assinatura está expirada. Use `!add_user` para renovar.");
+            return;
+        }
+
+        user.IsActive = true;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        await ReplyAsync($"✅ Usuário `{user.DiscordUserId}` desbloqueado.");
+    }
+
+    private async Task<UserSubscription?> FindUserAsync(
+        string userId,
+        CancellationToken cancellationToken)
+    {
+        if (!TryParseDiscordUserId(userId, out var discordUserId))
+        {
+            await ReplyAsync("❌ Informe um ID do Discord válido.");
+            return null;
+        }
+
+        var user = await _dbContext.UserSubscriptions
+            .FirstOrDefaultAsync(
+                subscription => subscription.DiscordUserId == discordUserId.ToString(),
+                cancellationToken);
+
+        if (user is null)
+            await ReplyAsync("❌ Usuário não encontrado.");
+
+        return user;
+    }
+
+    private async Task<string> GetUsernameAsync(string userId)
+    {
+        if (!ulong.TryParse(userId, out var discordUserId))
+            return "ID inválido";
+
+        try
+        {
+            var user = await Context.Client.Rest.GetUserAsync(discordUserId);
+            return user.Username;
+        }
+        catch
+        {
+            return "Desconhecido";
+        }
+    }
+
+    private async Task ReplyInChunksAsync(string message)
+    {
+        const int maxLength = 1900;
+
+        for (var start = 0; start < message.Length; start += maxLength)
+        {
+            var length = Math.Min(maxLength, message.Length - start);
+            await ReplyAsync(message.Substring(start, length));
+        }
+    }
+
+    private static bool TryParseDiscordUserId(string value, out ulong userId) =>
+        ulong.TryParse(value.Trim('<', '@', '!', '>'), out userId);
 }
