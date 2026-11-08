@@ -2,11 +2,10 @@ using System.Text;
 using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class ComandosCommand : CommandModule<CommandContext>
+public class ComandosCommand : ApplicationCommandModule<ApplicationCommandContext>
 {
     private const string ImagePath = "Assets/doxbin.jpg";
     private const string ImageFileName = "doxbin.jpg";
@@ -35,7 +34,12 @@ public class ComandosCommand : CommandModule<CommandContext>
             Embeds = [BuildEmbedMenu()]
         };
 
-        await Context.Message.SendAsync(messageProperties);
+        await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties
+        {
+            Content = messageProperties.Content,
+            Attachments = messageProperties.Attachments,
+            Embeds = messageProperties.Embeds
+        }));
     }
 
     private static EmbedProperties BuildEmbedMenu()

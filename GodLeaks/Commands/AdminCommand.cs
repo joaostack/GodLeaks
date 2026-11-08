@@ -3,14 +3,19 @@ using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
-public class AdminCommand : CommandModule<CommandContext>
+public class AdminCommand : ApplicationCommandModule<ApplicationCommandContext>
 {
     private readonly GodLeaksDbContext _dbContext;
     private readonly IAdmin _admin;
+
+    private async Task ReplyAsync(string message)
+    {
+        await RespondAsync(NetCord.Rest.InteractionCallback.Message(
+            new NetCord.Rest.InteractionMessageProperties { Content = message }));
+    }
 
     public AdminCommand(GodLeaksDbContext dbContext, IAdmin admin)
     {

@@ -4,7 +4,6 @@ using GodLeaks.Application.Interfaces;
 using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
@@ -210,12 +209,12 @@ public class CPFCommand : SubscriptionCommandModule
             ]
         };
 
-        await Context.Message.SendAsync(message);
+        await SendAsync(message);
     }
 
     private async Task SendTextAsync(string message)
     {
-        await Context.Message.SendAsync(new MessageProperties()
+        await SendAsync(new MessageProperties()
         {
             Content = message
         });

@@ -3,7 +3,6 @@ using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
@@ -19,7 +18,7 @@ public class NomeCommand : SubscriptionCommandModule
     }
 
     [SlashCommand("nome", "Consulta um nome completo")]
-    public async Task Nome([CommandParameter(Remainder = true)] string nome)
+    public async Task Nome(string nome)
     {
         if (!await EnsureSubscriptionAsync())
             return;

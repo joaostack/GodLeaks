@@ -3,7 +3,6 @@ using GodLeaks.Application.Interfaces;
 using NetCord;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
@@ -110,7 +109,7 @@ public class PlacaCommand : SubscriptionCommandModule
 
         var fileName = $"consulta-placa-{placa}.txt";
 
-        await Context.Message.SendAsync(
+        await SendAsync(
             new MessageProperties
             {
                 Content = $"✅ **Busca finalizada!** Encontrei **{response.dados.Count} registros** para essa placa e organizei tudo no arquivo. 🚘📄",

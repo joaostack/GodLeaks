@@ -2,7 +2,6 @@ using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
@@ -56,7 +55,7 @@ public class SenhaCommand : SubscriptionCommandModule
         byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
         using MemoryStream stream = new MemoryStream(bytes);
 
-        await Context.Message.SendAsync(new MessageProperties()
+        await SendAsync(new MessageProperties()
         {
             Content = $"✅ **Busca finalizada!** Encontrei resultados para essa senha e organizei tudo no arquivo em anexo. 🔐📄",
             Attachments = [new AttachmentProperties($"{senha}.txt", stream)],

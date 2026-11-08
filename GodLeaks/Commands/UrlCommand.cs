@@ -2,7 +2,6 @@ using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
-using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
 
@@ -44,7 +43,7 @@ public class UrlCommand : SubscriptionCommandModule
         byte[] bytes = Encoding.UTF8.GetBytes(sb.ToString());
         using MemoryStream stream = new MemoryStream(bytes);
 
-        await Context.Message.SendAsync(new MessageProperties()
+        await SendAsync(new MessageProperties()
         {
             Content = $"✅ **Busca finalizada!** Encontrei resultados para `{url}` e organizei tudo no arquivo em anexo. 🌐📄",
             Attachments = [new AttachmentProperties($"{url}.txt", stream)],
