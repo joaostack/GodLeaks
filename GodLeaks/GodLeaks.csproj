@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<Folder Include="Assets\" />
+		<Folder Include="Handlers\" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,6 +1,7 @@
 using System.Text;
 using NetCord;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -12,17 +13,17 @@ public class ComandosCommand : CommandModule<CommandContext>
 
     private static readonly (string Command, string Description)[] Commands =
     [
-        ("!cpf /cpf", "Consulta CPF"),
-        ("!email /email", "Consulta e-mail"),
-        ("!username /username", "Consulta username"),
-        ("!placa /placa", "Consulta placa de veículo"),
-        ("!nome /nome", "Consulta nome completo"),
-        ("!senha /senha", "Consulta senha"),
-        ("!url /url", "Consulta logins de uma URL"),
-        ("!telefone /telefone", "Consulta telefone")
+        ("/cpf", "Consulta CPF"),
+        ("/email", "Consulta e-mail"),
+        ("/username", "Consulta username"),
+        ("/placa", "Consulta placa de veículo"),
+        ("/nome", "Consulta nome completo"),
+        ("/senha", "Consulta senha"),
+        ("/url", "Consulta logins de uma URL"),
+        ("/telefone", "Consulta telefone")
     ];
 
-    [Command("comandos")]
+    [SlashCommand("comandos", "Exibe a central de comandos")]
     public async ValueTask ComandosAsync()
     {
         await using var stream = File.OpenRead(ImagePath);

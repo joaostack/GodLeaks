@@ -1,6 +1,7 @@
 using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -16,7 +17,7 @@ public class EmailCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("email")]
+    [SlashCommand("email", "Consulta um e-mail")]
     public async Task SendEmail(string email)
     {
         if (!await EnsureSubscriptionAsync())

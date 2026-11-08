@@ -1,5 +1,4 @@
-﻿using GodLeaks.Handlers;
-using GodLeaks.Infrastructure.DependencyInjection;
+﻿using GodLeaks.Infrastructure.DependencyInjection;
 using GodLeaks.Logging;
 using GodLeaks.Presentation.Console;
 using GodLeaks.Infrastructure.Persistence;
@@ -11,8 +10,6 @@ using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
-using NetCord.Hosting.Services.Commands;
-using NetCord.Services.Commands;
 using Spectre.Console;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -26,7 +23,6 @@ builder.Logging.AddProvider(new BotLoggerProvider());
 builder.Services.AddServerCtlServices();
 
 var token = builder.Configuration["Discord:Token"]?.Trim();
-var prefix = builder.Configuration["Discord:Prefix"];
 var apikey = builder.Configuration["APIKEY"];
 var consoleUi = new ConsoleUi();
 
@@ -36,11 +32,7 @@ builder
         options.Intents = GatewayIntents.All;
         options.Token = token;
     })
-    .AddApplicationCommands()
-    .AddCommands(options =>
-    {
-        options.ResultHandler = new CustomCommandResultHandler<CommandContext>();
-    });
+    .AddApplicationCommands();
 
 var host = builder.Build();
 
@@ -56,12 +48,6 @@ if (string.IsNullOrWhiteSpace(token))
     consoleUi.WriteError(
         "Token do Discord não configurado. Em Development, defina-o com " +
         "'dotnet user-secrets set \"Discord:Token\" \"SEU_TOKEN\"'.");
-    return;
-}
-
-if (string.IsNullOrWhiteSpace(prefix))
-{
-    consoleUi.WriteError("Prefixo do Discord não configurado em Discord:Prefix.");
     return;
 }
 

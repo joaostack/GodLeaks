@@ -3,6 +3,7 @@ using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -20,7 +21,7 @@ public class CPFCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("cpf")]
+    [SlashCommand("cpf", "Consulta um CPF")]
     public async Task CPF(string cpf)
     {
         if (!await EnsureSubscriptionAsync())

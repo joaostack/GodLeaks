@@ -2,6 +2,7 @@ using GodLeaks.Application.Interfaces;
 using GodLeaks.Domain.Entities;
 using GodLeaks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -27,7 +28,7 @@ public class AdminCommand : CommandModule<CommandContext>
         return false;
     }
 
-    [Command("update_user")]
+    [SlashCommand("update_user", "Atualiza o status e a duração de um usuário")]
     public async Task UpdateUser(
         string userId,
         bool isActive,
@@ -64,7 +65,7 @@ public class AdminCommand : CommandModule<CommandContext>
             $"Status: {(isActive ? "ativo" : "inativo")} por {days} dias.");
     }
 
-    [Command("add_user")]
+    [SlashCommand("add_user", "Adiciona ou renova o acesso de um usuário")]
     public async Task AddUser(
         string userId,
         int days)
@@ -114,7 +115,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await ReplyAsync($"✅ Usuário `{discordId}` ativado/adicionado por mais {days} dias.");
     }
 
-    [Command("list_users")]
+    [SlashCommand("list_users", "Lista as assinaturas cadastradas")]
     public async Task ListUsers()
     {
         var cancellationToken = CancellationToken.None;
@@ -147,7 +148,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await ReplyInChunksAsync("**Usuários cadastrados:**\n" + string.Join("\n", formattedUsers));
     }
 
-    [Command("list_admins")]
+    [SlashCommand("list_admins", "Lista os administradores cadastrados")]
     public async Task ListAdmins()
     {
         var cancellationToken = CancellationToken.None;
@@ -177,7 +178,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await ReplyInChunksAsync("**Administradores:**\n" + string.Join("\n", formattedAdmins));
     }
 
-    [Command("remove_user")]
+    [SlashCommand("remove_user", "Remove um usuário")]
     public async Task RemoveUser(
         string userId)
     {
@@ -208,7 +209,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await ReplyAsync($"✅ Usuário `{discordUserId}` removido!");
     }
 
-    [Command("ban_user")]
+    [SlashCommand("ban_user", "Bloqueia um usuário")]
     public async Task BanUser(
         string userId)
     {
@@ -225,7 +226,7 @@ public class AdminCommand : CommandModule<CommandContext>
         await ReplyAsync($"✅ Usuário `{user.DiscordUserId}` bloqueado.");
     }
 
-    [Command("unban_user")]
+    [SlashCommand("unban_user", "Desbloqueia um usuário")]
     public async Task UnbanUser(
         string userId)
     {

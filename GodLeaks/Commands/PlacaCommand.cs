@@ -2,6 +2,7 @@ using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -17,7 +18,7 @@ public class PlacaCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("placa")]
+    [SlashCommand("placa", "Consulta uma placa de veículo")]
     public async Task PlacaAsync(string placa)
     {
         if (!await EnsureSubscriptionAsync())

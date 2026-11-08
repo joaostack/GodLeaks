@@ -1,6 +1,7 @@
 using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -16,7 +17,7 @@ public class UrlCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("url")]
+    [SlashCommand("url", "Consulta logins de uma URL")]
     public async Task Url(string url)
     {
         if (!await EnsureSubscriptionAsync())

@@ -2,6 +2,7 @@ using MemoryStream = System.IO.MemoryStream;
 using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -17,7 +18,7 @@ public class NomeCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("nome")]
+    [SlashCommand("nome", "Consulta um nome completo")]
     public async Task Nome([CommandParameter(Remainder = true)] string nome)
     {
         if (!await EnsureSubscriptionAsync())

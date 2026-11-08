@@ -1,6 +1,7 @@
 using System.Text;
 using GodLeaks.Application.Interfaces;
 using NetCord.Rest;
+using NetCord.Services.ApplicationCommands;
 using NetCord.Services.Commands;
 
 namespace GodLeaks.Commands;
@@ -16,7 +17,7 @@ public class UsernameCommand : SubscriptionCommandModule
         _leakSight = leakSight;
     }
 
-    [Command("username")]
+    [SlashCommand("username", "Consulta um username")]
     public async Task Username(string username)
     {
         if (!await EnsureSubscriptionAsync())
