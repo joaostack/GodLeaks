@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NetCord.Gateway;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
+using NetCord.Hosting.Services.ApplicationCommands;
 using NetCord.Hosting.Services.Commands;
 using NetCord.Services.Commands;
 using Spectre.Console;
@@ -35,6 +36,7 @@ builder
         options.Intents = GatewayIntents.All;
         options.Token = token;
     })
+    .AddApplicationCommands()
     .AddCommands(options =>
     {
         options.ResultHandler = new CustomCommandResultHandler<CommandContext>();
