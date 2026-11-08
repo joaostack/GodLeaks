@@ -7,6 +7,7 @@ namespace GodLeaks.Commands;
 public abstract class SubscriptionCommandModule : ApplicationCommandModule<ApplicationCommandContext>
 {
     private readonly ISubscriptionService _subscription;
+    private bool _responded;
 
     protected SubscriptionCommandModule(ISubscriptionService subscription)
     {
@@ -28,12 +29,12 @@ public abstract class SubscriptionCommandModule : ApplicationCommandModule<Appli
 
     protected async Task ReplyAsync(string message)
     {
-        await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties { Content = message }));
+        await SendInteractionAsync(new InteractionMessageProperties { Content = message });
     }
 
     protected async Task ReplyAsync(ReplyMessageProperties message)
     {
-        await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties
+        await SendInteractionAsync(new InteractionMessageProperties
         {
             Content = message.Content,
             Attachments = message.Attachments,
@@ -42,12 +43,12 @@ public abstract class SubscriptionCommandModule : ApplicationCommandModule<Appli
             AllowedMentions = message.AllowedMentions,
             Flags = message.Flags,
             Poll = message.Poll
-        }));
+        });
     }
 
     protected async Task SendAsync(MessageProperties message)
     {
-        await RespondAsync(InteractionCallback.Message(new InteractionMessageProperties
+        await SendInteractionAsync(new InteractionMessageProperties
         {
             Content = message.Content,
             Attachments = message.Attachments,
@@ -56,6 +57,18 @@ public abstract class SubscriptionCommandModule : ApplicationCommandModule<Appli
             AllowedMentions = message.AllowedMentions,
             Flags = message.Flags,
             Poll = message.Poll
-        }));
+        });
+    }
+
+    private async Task SendInteractionAsync(InteractionMessageProperties message)
+    {
+        if (_responded)
+        {
+            await FollowupAsync(message);
+            return;
+        }
+
+        await RespondAsync(InteractionCallback.Message(message));
+        _responded = true;
     }
 }

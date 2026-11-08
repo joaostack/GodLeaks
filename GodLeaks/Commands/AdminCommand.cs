@@ -10,11 +10,20 @@ public class AdminCommand : ApplicationCommandModule<ApplicationCommandContext>
 {
     private readonly GodLeaksDbContext _dbContext;
     private readonly IAdmin _admin;
+    private bool _responded;
 
     private async Task ReplyAsync(string message)
     {
-        await RespondAsync(NetCord.Rest.InteractionCallback.Message(
-            new NetCord.Rest.InteractionMessageProperties { Content = message }));
+        var response = new NetCord.Rest.InteractionMessageProperties { Content = message };
+
+        if (_responded)
+        {
+            await FollowupAsync(response);
+            return;
+        }
+
+        await RespondAsync(NetCord.Rest.InteractionCallback.Message(response));
+        _responded = true;
     }
 
     public AdminCommand(GodLeaksDbContext dbContext, IAdmin admin)
